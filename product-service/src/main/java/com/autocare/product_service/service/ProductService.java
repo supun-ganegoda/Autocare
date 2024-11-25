@@ -1,11 +1,15 @@
 package com.autocare.product_service.service;
 
 import com.autocare.product_service.dto.ProductRequest;
+import com.autocare.product_service.dto.ProductResponse;
 import com.autocare.product_service.model.Product;
 import com.autocare.product_service.repository.ProductRepository;
+import com.autocare.product_service.util.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public Product createProduct(ProductRequest productRequest){
+    public ProductResponse createProduct(ProductRequest productRequest){
         Product product = Product.builder().
                 name(productRequest.name()).
                 description(productRequest.description()).
@@ -21,6 +25,12 @@ public class ProductService {
                 build();
         productRepository.save(product);
         log.info("Product created successfully");
-        return product;
+        return ProductMapper.mapToProductResponse(product);
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        log.info("Getting all products successful");
+        return productRepository.findAll().stream().map(product -> new ProductResponse(
+                product.getId(),product.getName(), product.getDescription(),product.getPrice())).toList();
     }
 }
