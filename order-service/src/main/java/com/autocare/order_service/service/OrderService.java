@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
     public void makeOrder(OrderRequest orderRequest){
+        /*
+        before making the order, it need to be checked if the order quantity is available in the inventory,
+        therefore it need to communicate with inventory service for getting the available quota.
+        For inter-service communication, spring cloud openFeign
+        */
+
         Order order = Mapper.mapOrderRequestToOrder((orderRequest));
         orderRepository.save(order);
         log.info("Order saved successful");
