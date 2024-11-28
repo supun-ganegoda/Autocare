@@ -17,4 +17,13 @@ export class ProductService {
       return throwError(()=>err);
     }))
   }
+
+  createProduct(product: Product):Observable<Product>{
+    return this.httpClient.post<Product>(this.baseUrl+"/product",product).pipe(catchError(
+      (err)=>{
+        console.error(err);
+        return throwError(()=>err);
+      }
+    ))
+  }
 }
