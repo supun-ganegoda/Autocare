@@ -3,10 +3,12 @@ package com.autocare.order_service.service;
 import com.autocare.order_service.client.InventoryClient;
 import com.autocare.order_service.dto.OrderRequest;
 import com.autocare.order_service.model.Order;
+import com.autocare.order_service.order.event.OrderPlacedEvent;
 import com.autocare.order_service.repository.OrderRepository;
 import com.autocare.order_service.util.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient;
+    private final KafkaTemplate<String, OrderPlacedEvent> orderPlaceKafkaTemplate;
 
     public void makeOrder(OrderRequest orderRequest) {
         /*
@@ -28,6 +31,16 @@ public class OrderService {
             Order order = Mapper.mapOrderRequestToOrder((orderRequest));
             orderRepository.save(order);
             log.info("Order saved successful");
+
+            /*
+            after placing the order, it needs to send the notification using the kafka message queue.
+            below is the configuration of kafka message queue
+            */
+            OrderPlacedEvent placedOrder = new OrderPlacedEvent(orderRequest.id().toString(), "user@gmail.com", "user", "user");
+            log.info("Start sending kafka topic");
+            orderPlaceKafkaTemplate.send("Order placed", placedOrder);
+            log.info("End sending kafka topic");
+
         }else{
             throw new RuntimeException("The item with name "+orderRequest.skuCode()+" is not available");
         }
