@@ -160,6 +160,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>1.8.2</version>
+				<executions>
+					<execution>
+						<id>schemas</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<repositories>
@@ -175,6 +193,14 @@
 			<id>confluent</id>
 			<name>Spring confluent</name>
 			<url>https://packages.confluent.io/maven</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>confluent-plugin</id>
+			<name>Spring confluent plugin</name>
+			<url>https://mvnrepository.com/artifact/org.apache.avro/avro-maven-plugin</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
