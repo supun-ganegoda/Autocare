@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,9 +38,9 @@ public class OrderService {
             after placing the order, it needs to send the notification using the kafka message queue.
             below is the configuration of kafka message queue
             */
-            OrderPlacedEvent placedOrder = new OrderPlacedEvent(orderRequest.id().toString(), "user@gmail.com", "user", "user");
+            OrderPlacedEvent placedOrder = new OrderPlacedEvent(UUID.randomUUID().toString(), "user@gmail.com".toString(), "user".toString(), "user".toString());
             log.info("Start sending kafka topic");
-            orderPlaceKafkaTemplate.send("Order placed", placedOrder);
+            orderPlaceKafkaTemplate.send("order-placed", placedOrder);
             log.info("End sending kafka topic");
 
         }else{

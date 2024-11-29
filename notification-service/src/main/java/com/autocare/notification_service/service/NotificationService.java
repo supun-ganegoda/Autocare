@@ -1,6 +1,6 @@
 package com.autocare.notification_service.service;
 
-import com.autocare.notification_service.order.event.OrderPlacedEvent;
+import com.autocare.order_service.order.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -10,6 +10,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+/*
+Run maven clean compile for auto generate the orderEvent class using the kafka schema
+*/
 @Service
 @RequiredArgsConstructor
 @Slf4j
