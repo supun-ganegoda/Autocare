@@ -11,3 +11,8 @@ services:
       MONGO_INITDB_ROOT_DATABASE: product-service
     volumes:
       - ./data:/data/db
+  loki:
+      image: grafana/loki:main
+      command: [ '-config.file=/etc/loki/local-config.yaml' ]
+      ports:
+        - '3100:3100'
